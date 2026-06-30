@@ -4,6 +4,9 @@ from django.contrib.auth.models import User
 from django.contrib.auth import login, authenticate, logout 
 from django.contrib.auth.password_validation import validate_password
 from django.core.exceptions import ValidationError
+from .models import UserRole
+
+from jobapp.models import UserRole
 
 def dashboard(request):
     if request.user.is_authenticated:
@@ -20,6 +23,7 @@ def usignup(request):
 
         username = request.POST.get("username")
         email = request.POST.get("email")
+        role = request.POST.get("role")
         password = request.POST.get("password")
         confirm_password = request.POST.get("confirm_password")
 
@@ -46,7 +50,7 @@ def usignup(request):
                 )
 
                 user.save()
-
+                UserRole.objects.create(user=user, role=role)   
                 return redirect("ulogin")
 
         else:
