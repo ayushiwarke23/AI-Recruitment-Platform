@@ -1,0 +1,65 @@
+{% extends "base.html" %}
+{% block content %}
+    <h1>Candidate Profile</h1>
+    {% if profile.profile_picture %}
+        <img src="{{ profile.profile_picture.url }}" alt="Profile Picture" width="150"><br><br>
+    {% endif %}
+
+    <br>
+    <p><strong>Username:</strong> {{ profile.user.username }}</p>
+    <p><strong>Email:</strong> {{ profile.user.email }}</p>
+    <p><strong>Full Name:</strong> {{ profile.full_name }}</p>
+    <p><strong>Phone:</strong> {{ profile.phone }}</p>
+    <p><strong>Date of Birth:</strong> {{ profile.date_of_birth }}</p>
+    <p><strong>Gender:</strong> {{ profile.gender }}</p>
+    <p><strong>Bio:</strong> {{ profile.bio }}</p>
+    <p><strong>GitHub:</strong> <a href="{{ profile.github }}" target="_blank">{{ profile.github }}</a></p>
+    <p><strong>LinkedIn:</strong> <a href="{{ profile.linkedin }}" target="_blank">{{ profile.linkedin }}</a></p>
+
+    <hr>
+
+<h2>Education</h2>
+
+{% for education in educations %}
+
+<div>
+
+    <h3>{{ education.degree }}</h3>
+
+    <p>{{ education.college_name }}</p>
+
+    <p>{{ education.field_of_study }}</p>
+
+    <p>{{ education.start_year }} - {{ education.end_year }}</p>
+
+    <p>CGPA : {{ education.cgpa }}</p>
+
+    <a href="{% url 'edit_education' education.id %}">
+        Edit
+    </a>
+
+    |
+
+    <a href="{% url 'delete_education' education.id %}"
+       onclick="return confirm('Delete this education?')">
+        Delete
+    </a>
+
+</div>
+
+<hr>
+
+{% empty %}
+
+<p>No education added yet.</p>
+
+{% endfor %}
+
+<br>
+
+<a href="{% url 'add_education' %}">
+    + Add Education
+</a>
+
+    <a href="{% url 'candidate_profile' %}">Edit Profile</a>
+{% endblock %}

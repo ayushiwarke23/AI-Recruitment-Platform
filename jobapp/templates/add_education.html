@@ -1,0 +1,62 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+{% if form.instance.pk %}
+    <h1>Edit Education</h1>
+{% else %}
+    <h1>Add Education</h1>
+{% endif %}
+
+<form method="POST">
+
+    {% csrf_token %}
+
+    <p>
+        <label>College Name</label><br>
+        {{ form.college_name }}
+    </p>
+
+    <p>
+        <label>Degree</label><br>
+        {{ form.degree }}
+    </p>
+
+    <p>
+        <label>Field of Study</label><br>
+        {{ form.field_of_study }}
+    </p>
+
+    <p>
+        <label>Start Year</label><br>
+        {{ form.start_year }}
+    </p>
+
+    <p>
+        <label>End Year</label><br>
+        {{ form.end_year }}
+    </p>
+
+    <p>
+        <label>GRADE</label><br>
+        {{ form.grade }}
+    </p>
+
+    <p>
+        {{ form.currently_studying }}
+        <label>Currently Studying</label>
+    </p>
+
+    <br>
+
+    {% if form.instance.pk %}
+        <button type="submit">Update Education</button>
+    {% else %}
+        <button type="submit">Save Education</button>
+    {% endif %}
+
+    <a href="{% url 'view_candidate_profile' %}">Cancel</a>
+
+</form>
+
+{% endblock %}
