@@ -1,12 +1,12 @@
-from django.shortcuts import render,redirect
+from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
 from django.contrib.auth import login, authenticate, logout 
 from django.contrib.auth.password_validation import validate_password
 from django.core.exceptions import ValidationError
-from .models import Education, UserRole
-from django.contrib.auth.decorators import login_required
-from .forms import EducationForm
+from httpcore import request
+from .models import Education, Experience, Project, Skill,UserRole
+from .forms import EducationForm, ProjectForm, SkillForm, ExperienceForm
 
 def dashboard(request):
     if request.user.is_authenticated:
@@ -137,12 +137,17 @@ def view_candidate_profile(request):
         profile = CandidateProfile.objects.get(user=request.user)
     except CandidateProfile.DoesNotExist:
         return redirect("candidate_profile")
-
-    educations = Education.objects.filter(candidate=profile)
-
+    
+    educations = Education.objects.filter(candidate=profile).order_by("-end_year")
+    skills = Skill.objects.filter(candidate=profile).order_by("-skill_name")
+    projects = Project.objects.filter(candidate=profile).order_by("-id")
+    experiences = Experience.objects.filter(candidate=profile).order_by("-start_date")
     context = {
         "profile": profile,
         "educations": educations,
+        "skills": skills,
+        "projects":projects,
+        "experiences": experiences,
     }
 
     return render(
@@ -153,8 +158,10 @@ def view_candidate_profile(request):
 @login_required
 def add_education(request):
 
-    profile = CandidateProfile.objects.get(user=request.user)
-
+    profile = get_object_or_404(
+    CandidateProfile,
+    user=request.user
+)
     if request.method == "POST":
         form = EducationForm(request.POST)
 
@@ -168,19 +175,17 @@ def add_education(request):
     else:
         form = EducationForm()
 
-    educations = Education.objects.filter(candidate=profile)
-
-    context = {
-        "form": form,
-        "educations": educations,
+    return render(
+    request,
+    "add_education.html",
+    {
+        "form": form
     }
-
-    return render(request, "add_education.html", context)
-
+)
 @login_required
 def edit_education(request,id):
-    profile = CandidateProfile.objects.get(user=request.user)
-    education = Education.objects.get(id=id,candidate=profile)
+    profile = get_object_or_404(CandidateProfile, user=request.user)
+    education = get_object_or_404(Education, id=id, candidate=profile)
     if request.method == "POST":
         form = EducationForm(request.POST, instance=education)
         if form.is_valid():
@@ -192,9 +197,141 @@ def edit_education(request,id):
 
 @login_required
 def delete_education(request,id):
-    profile = CandidateProfile.objects.get(user=request.user)
-    education = Education.objects.get(id=id,candidate=profile)
+    profile = get_object_or_404(
+    CandidateProfile,
+    user=request.user)   
+    education = get_object_or_404(Education, id=id, candidate=profile)
     education.delete()
     return redirect("view_candidate_profile")
 
+@login_required
+def add_skills(request):
+    profile = get_object_or_404(
+    CandidateProfile,
+    user=request.user)    
+    if request.method == "POST":
+        form = SkillForm(request.POST)
+        if form.is_valid():
+            skill = form.save(commit=False)
+            skill.candidate = profile
+            skill.save()
+            return redirect("view_candidate_profile")
+    else:
+        form = SkillForm()
 
+    return render(
+    request,
+    "add_skills.html",
+    {
+        "form": form
+    }
+)
+
+@login_required
+def delete_skills(request,id):
+    profile = get_object_or_404(
+    CandidateProfile,
+    user=request.user
+)
+    skill = get_object_or_404(Skill, id=id, candidate=profile)
+    skill.delete()
+    return redirect("view_candidate_profile")
+
+@login_required
+def add_project(request):
+    profile = get_object_or_404(
+    CandidateProfile,
+    user=request.user
+)
+    if request.method == "POST":
+        form = ProjectForm(request.POST, request.FILES)
+        if form.is_valid():
+            project = form.save(commit=False)
+            project.candidate = profile
+            project.save()
+            return redirect("view_candidate_profile")
+    else:
+        form = ProjectForm()
+
+    return render(
+    request,
+    "add_project.html",
+    {
+        "form": form
+    }
+)
+@login_required
+def edit_project(request,id):
+    profile = get_object_or_404(
+    CandidateProfile,
+    user=request.user
+)
+    project = get_object_or_404(Project, id=id, candidate=profile)
+    if request.method == "POST":
+        form = ProjectForm(request.POST, request.FILES, instance=project)
+        if form.is_valid():
+            form.save()
+            return redirect("view_candidate_profile")
+    else:
+        form = ProjectForm(instance=project)    
+    return render(request, "add_project.html", {"form": form})
+
+@login_required
+def delete_project(request,id):
+    profile = get_object_or_404(
+    CandidateProfile,
+    user=request.user
+)
+    project = get_object_or_404(Project, id=id, candidate=profile)
+    project.delete()
+    return redirect("view_candidate_profile")
+
+
+
+@login_required
+def add_experience(request):
+    profile = get_object_or_404(
+    CandidateProfile,
+    user=request.user
+    )
+    if request.method == "POST":
+        form = ExperienceForm(request.POST)
+        if form.is_valid():
+            experience = form.save(commit=False)
+            experience.candidate = profile
+            experience.save()
+            return redirect("view_candidate_profile")
+    else:
+        form = ExperienceForm()
+    return render(
+    request,
+    "add_experience.html",
+    {
+        "form": form
+    }
+)
+@login_required
+def edit_experience(request,id):
+    profile = get_object_or_404(
+    CandidateProfile,
+    user=request.user
+)
+    experience = get_object_or_404(Experience, id=id, candidate=profile)
+    if request.method == "POST":
+        form = ExperienceForm(request.POST, instance=experience)
+        if form.is_valid():
+            form.save()
+            return redirect("view_candidate_profile")
+    else:
+        form = ExperienceForm(instance=experience)
+    return render(request, "add_experience.html", {"form": form})
+
+@login_required
+def delete_experience(request,id):
+    profile = get_object_or_404(
+    CandidateProfile,
+    user=request.user
+)
+    experience = get_object_or_404(Experience, id=id, candidate=profile)
+    experience.delete()
+    return redirect("view_candidate_profile")

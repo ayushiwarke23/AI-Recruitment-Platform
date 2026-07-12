@@ -1,0 +1,26 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<h1>Add Skill</h1>
+
+<form method="POST">
+
+    {% csrf_token %}
+
+    <p>
+        <label>Skill</label><br>
+        {{ form.skill_name }}
+    </p>
+
+    <br>
+
+    <button type="submit">Save Skill</button>
+
+    <a href="{% url 'view_candidate_profile' %}">
+        Cancel
+    </a>
+
+</form>
+
+{% endblock %}

@@ -1,0 +1,20 @@
+{% extends 'base.html' %}
+
+{% block content %}
+    {% if form.instance.pk %}
+        <h1>Edit Experience</h1>
+    {% else %}
+        <h1>Add Experience</h1>
+    {% endif %}
+
+    <form method = "POST">
+        {% csrf_token %}
+        <p>{{ form.as_p }}</p>
+        {% if form.instance.pk %}
+            <button type="submit">Update Experience</button>
+        {% else %}
+            <button type="submit">Add Experience</button>
+        {% endif %}
+    </form>
+    <a href="{% url 'view_candidate_profile' %}">Cancel</a>
+{% endblock %}

@@ -1,0 +1,27 @@
+{% extends "base.html" %}
+{% block content %}
+
+{% if form.instance.pk %}
+    <h1>Edit Project</h1>
+{% else %}
+    <h1>Add Project</h1>
+{% endif %}
+
+<form method="POST" enctype="multipart/form-data">
+
+    {% csrf_token %}
+
+    <p>
+        {{ form.as_p }}
+    </p>
+    <br>
+
+    {% if form.instance.pk %}
+        <button type="submit">Update Project</button>
+    {% else %}
+        <button type="submit">Save Project</button>
+    {% endif %}
+
+    <a href="{% url 'view_candidate_profile' %}">Cancel</a>
+</form>
+{% endblock %}
