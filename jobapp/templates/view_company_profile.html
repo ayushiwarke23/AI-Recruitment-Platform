@@ -1,0 +1,21 @@
+{%extends 'base.html' %}
+{% block content %}
+    <h2>Company Profile</h2>
+    <p><strong>Company Name:</strong> {{ company.company_name }}</p>
+    <div>
+        {% if company.company_logo %}
+            <img src="{{ company.company_logo.url }}" alt="Company Logo" width="150">
+        {% endif %}
+    </div>
+    <p><strong>Description:</strong> {{ company.description }}</p>
+    <p><strong>Industry:</strong> {{ company.industry }}</p>
+    <p><strong>Company Size:</strong> {{ company.company_size }}</p>
+    <p><strong>Headquarters:</strong> {{ company.headquarters }}</p>
+    <p><strong>Founded Year:</strong> {{ company.founded_year }}</p>
+    <p><strong>Website:</strong> <a href="{{ company.website }}" target="_blank">{{ company.website }}</a></p>
+    <p><strong>LinkedIn:</strong> <a href="{{ company.linkedin }}" target="_blank">{{ company.linkedin }}</a></p>
+    <p><strong>Email:</strong> {{ company.email }}</p>
+    {% if company.phone %}
+        <p><strong>Phone:</strong> {{ company.phone }}</p>
+    {% endif %}
+{% endblock %}

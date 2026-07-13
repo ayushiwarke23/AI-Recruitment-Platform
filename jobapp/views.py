@@ -5,15 +5,21 @@ from django.contrib.auth import login, authenticate, logout
 from django.contrib.auth.password_validation import validate_password
 from django.core.exceptions import ValidationError
 from httpcore import request
-from .models import Education, Experience, Project, Skill,UserRole
-from .forms import EducationForm, ProjectForm, SkillForm, ExperienceForm
+from .models import Certification, Education, Experience, Project, Skill,UserRole
+from .forms import CertificationForm, EducationForm, ProjectForm, SkillForm, ExperienceForm
 
+@login_required
 def dashboard(request):
-    if request.user.is_authenticated:
-        return render(request, 'dashboard.html')
-    else:
-        return redirect('ulogin')
-    
+
+    role = UserRole.objects.get(user=request.user)
+
+    return render(
+        request,
+        "dashboard.html",
+        {
+            "role": role.role
+        }
+    )
 
 def usignup(request):
     if request.user.is_authenticated:
@@ -142,12 +148,14 @@ def view_candidate_profile(request):
     skills = Skill.objects.filter(candidate=profile).order_by("-skill_name")
     projects = Project.objects.filter(candidate=profile).order_by("-id")
     experiences = Experience.objects.filter(candidate=profile).order_by("-start_date")
+    certifications = Certification.objects.filter(candidate=profile).order_by("-issue_date")
     context = {
         "profile": profile,
         "educations": educations,
         "skills": skills,
         "projects":projects,
         "experiences": experiences,
+        "certifications": certifications,
     }
 
     return render(
@@ -236,6 +244,39 @@ def delete_skills(request,id):
     skill = get_object_or_404(Skill, id=id, candidate=profile)
     skill.delete()
     return redirect("view_candidate_profile")
+
+@login_required
+def add_certifications(request):
+    profile = get_object_or_404(
+    CandidateProfile,
+    user=request.user)    
+    if request.method == "POST":
+        form = CertificationForm(request.POST)
+        if form.is_valid():
+            certification = form.save(commit=False)
+            certification.candidate = profile
+            certification.save()
+            return redirect("view_candidate_profile")
+    else:
+        form = CertificationForm()
+
+    return render(
+    request,
+    "add_certifications.html",
+    {
+        "form": form
+    }
+)
+@login_required
+def delete_certifications(request,id):
+    profile = get_object_or_404(
+    CandidateProfile,
+    user=request.user
+)
+    certification = get_object_or_404(Certification, id=id, candidate=profile)
+    certification.delete()
+    return redirect("view_candidate_profile")
+
 
 @login_required
 def add_project(request):

@@ -77,6 +77,30 @@
 <a href="{% url 'add_skills' %}">+ Add Skills</a>
 <br><br>
 
+<h2>Certifications</h2>
+
+{% for certification in certifications %}
+    <div>
+        <label>Certification Name</label>
+        <p>{{ certification.certification_name }}</p>
+        <label>Issuing Organization</label>
+        <p>{{ certification.issuing_organization }}</p>
+        <label>Issue Date</label>
+        <p>{{ certification.issue_date }} - {{ certification.expiration_date }}</p>
+        <label>Credential ID</label>
+        <p>{{ certification.credential_id }}</p>
+        <label>Credential URL</label>
+        <p>{{ certification.credential_url }}</p>
+        <a href="{% url 'delete_certifications' certification.id %}" onclick="return confirm('Are you sure you want to delete this certification?')">Delete</a>
+    </div>
+{% empty %}
+    <p>No certifications added yet.</p>
+{% endfor %}
+<br><br>
+<a href="{% url 'add_certifications' %}">+ Add Certifications</a>
+<br><br>
+
+
 <hr>
 <h3>Projects</h3>
 {% for project in projects %}

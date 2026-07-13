@@ -1,5 +1,5 @@
 from django import forms
-from .models import Education, Experience, Skill, Project
+from .models import Certification, Education, Experience, Skill, Project, Company
 
 class EducationForm(forms.ModelForm):
 
@@ -50,4 +50,33 @@ class ExperienceForm(forms.ModelForm):
             "end_date",
             "currently_working",
             "job_description",
+        ]
+class CompanyForm(forms.ModelForm):
+    class Meta:
+        model = Company
+
+        fields = [
+            "company_name",
+            "company_logo",
+            "website",
+            "email",
+            "phone",
+            "description",
+            "industry",
+            "headquarters",
+            "founded_year",
+            "company_size",
+            "linkedin",
+        ]
+class CertificationForm(forms.ModelForm):
+    class Meta:
+        model = Certification
+
+        fields = [
+            "certification_name",
+            "issuing_organization",
+            "issue_date",
+            "expiration_date",
+            "credential_id",
+            "credential_url",
         ]

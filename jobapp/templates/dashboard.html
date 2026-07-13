@@ -1,17 +1,33 @@
 {% extends 'base.html' %}
 
 {% block content %}
-    <h2>Dashboard</h2>
-    <p>Welcome, {{ user.username }}!</p>
-    <p>This is your dashboard where you can manage your job applications.</p>
-<br><br>
-    <a href="{% url 'view_candidate_profile' %}">
-View Profile
-</a>
 
-<br><br>
+<h2>Dashboard</h2>
 
-<a href="{% url 'candidate_profile' %}">
-Edit Profile
-</a>
+<p>Welcome {{ user.username }}</p>
+
+{% if role == "candidate" %}
+
+    <h3>Candidate Dashboard</h3>
+
+    <a href="{% url 'view_candidate_profile' %}">View Profile</a><br><br>
+
+    <a href="{% url 'candidate_profile' %}">Edit Profile</a>
+
+{% elif role == "recruiter" %}
+
+    <h3>Recruiter Dashboard</h3>
+
+    <p>Recruiter features coming soon...</p>
+
+{% elif role == "company" %}
+
+    <h3>Company Dashboard</h3>
+
+    <a href="{% url 'view_company_profile' %}">View Company</a><br><br>
+
+    <a href="{% url 'company_profile' %}">Edit Company</a>
+
+{% endif %}
+
 {% endblock %}

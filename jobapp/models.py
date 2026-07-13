@@ -4,7 +4,7 @@ from django.db import models
 from django.contrib.auth.models import User
 
 class UserRole(models.Model):
-    ROLE_CHOICES = (("candidate","Candidate"),("recruiter","Recruiter"),)
+    ROLE_CHOICES = (("candidate","Candidate"),("recruiter","Recruiter"),("company","Company"))
     user = models.OneToOneField(User, on_delete=models.CASCADE)
     role = models.CharField(max_length=20, choices=ROLE_CHOICES)
 
@@ -62,6 +62,21 @@ class Skill(models.Model):
 
     def __str__(self):
         return f"{self.candidate.full_name} - {self.skill_name}"
+class Certification(models.Model):
+    candidate = models.ForeignKey(
+        CandidateProfile,
+        on_delete=models.CASCADE,
+        related_name="certifications"
+    )
+    certification_name = models.CharField(max_length=100)
+    issuing_organization = models.CharField(max_length=100)
+    issue_date = models.DateField()
+    expiration_date = models.DateField(blank=True, null=True)
+    credential_id = models.CharField(max_length=100, blank=True)
+    credential_url = models.URLField(blank=True)
+
+    def __str__(self):
+        return f"{self.candidate.full_name} - {self.certification_name}"
 
 class Project(models.Model):
     candidate = models.ForeignKey(
@@ -82,15 +97,59 @@ class Project(models.Model):
         return f"{self.candidate.full_name} - {self.project_title}"
 
 class Company(models.Model):
+    user = models.OneToOneField(User, on_delete=models.CASCADE,related_name="company_profile", blank=True, null=True)
     company_name = models.CharField(max_length=100)
-    company_description = models.TextField()
-    company_logo = models.ImageField(upload_to='company_logos/', blank=True, null=True)
-    company_website = models.URLField(blank=True)
-    no_of_employees = models.PositiveIntegerField(blank=True, null=True)
-    industry = models.CharField(max_length=100, blank=True)
+    COMPANY_SIZE = [
+        ("1-10", "1-10"),
+        ("11-50", "11-50"),
+        ("51-200", "51-200"),
+        ("201-500", "201-500"),
+        ("501-1000", "501-1000"),
+        ("1001-5000", "1001-5000"),
+        ("5001-10000", "5001-10000"),
+        ("10001+", "10001+"),
+    ]
+    INDUSTRIES= [
+        ("Information Technology", "Information Technology"),
+        ("Healthcare", "Healthcare"),       
+        ("Finance", "Finance"),
+        ("Education", "Education"),
+        ("Retail", "Retail"),
+        ("Manufacturing", "Manufacturing"),
+        ("Transportation and Logistics", "Transportation and Logistics"),
+        ("Hospitality and Tourism", "Hospitality and Tourism"),
+        ("Construction", "Construction"),
+        ("Energy and Utilities", "Energy and Utilities"),
+        ("Telecommunications", "Telecommunications"),
+        ("Media and Entertainment", "Media and Entertainment"),
+        ("Government and Public Sector", "Government and Public Sector"),
+        ("Nonprofit and Social Services", "Nonprofit and Social Services"),
+        ("Real Estate", "Real Estate"),
+        ("Legal Services", "Legal Services"),
+        ("Consulting", "Consulting"),
+        ("Agriculture", "Agriculture"),
+        ("Aerospace and Defense", "Aerospace and Defense"),
+        ("Pharmaceuticals and Biotechnology", "Pharmaceuticals and Biotechnology"),
+        ("Other", "Other"),
+    ]
+
+
+    company_logo = models.ImageField(upload_to = "company_logos/",blank=True, null=True )
+    website = models.URLField(blank=True)
+    email = models.EmailField(blank=True)
+    phone = models.CharField(max_length=15, blank=True)
+    description = models.TextField(blank=True)
+    industry = models.CharField(max_length=100, choices=INDUSTRIES)
+    headquarters = models.CharField(max_length=100, blank=True)
+    founded_year = models.PositiveIntegerField(null=True, blank=True)
+    company_size = models.CharField(max_length=50, choices=COMPANY_SIZE, blank=True, null=True)
+    created_at = models.DateTimeField(auto_now_add=True, blank=True)
+    linkedin = models.URLField(blank=True)
 
     def __str__(self):
         return self.company_name
+
+
 
 class Experience(models.Model):
     candidate = models.ForeignKey(
