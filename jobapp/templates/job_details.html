@@ -35,13 +35,14 @@
 <p><strong>Application Deadline:</strong>
     {{ job.application_deadline }}
 </p>
-
+<a href="{% url 'save_job' job.id %}">
+    Save Job
+</a>
 <br>
 
-<button>
+<a href="{% url 'apply_job' job.id %}">
     Apply Now
-</button>
-
+</a>
 <br><br>
 
 <a href="{% url 'browse_jobs' %}">

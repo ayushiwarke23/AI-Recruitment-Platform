@@ -6,7 +6,9 @@ from jobapp import views
 from jobapp.views import add_education, ulogin,usignup,ulogout,change_password,dashboard, candidate_profile, view_candidate_profile, edit_education, delete_education,add_skills,delete_skills,add_project,edit_project,delete_project, add_experience, edit_experience, delete_experience, add_certifications, delete_certifications   
 from jobapp.company_views import company_profile, view_company_profile
 from jobapp.recruiter_views import recruiter_profile, view_recruiter_profile, edit_recruiter_profile
-from jobapp.job_views import add_job, view_job, edit_job, delete_job, browse_jobs, job_details
+from jobapp.job_views import add_job, view_job, edit_job, delete_job, browse_jobs, job_details, apply_job, my_applications, save_job, saved_jobs, remove_saved_job
+
+
 
 urlpatterns = [
     path('admin/', admin.site.urls),
@@ -40,11 +42,12 @@ urlpatterns = [
     path("edit_job/<int:id>/", edit_job,name="edit_job"),
     path("delete_job/<int:id>/",delete_job,name="delete_job"),
     path("browse_jobs/", browse_jobs, name="browse_jobs"),
-    path("job_details/<int:id>/", job_details, name = "job_details")
-    
-
-
-
+    path("job_details/<int:id>/", job_details, name = "job_details"),
+    path("apply_job/<int:id>/",apply_job,name="apply_job"),
+    path("my_applications/",my_applications,name="my_applications"),
+    path("save_job/<int:id>/",save_job,name="save_job"),
+    path("saved_jobs/",saved_jobs,name="saved_jobs"),
+    path("remove_saved_job/<int:id>/",remove_saved_job,name="remove_saved_job"),  
 ]
 
 if settings.DEBUG:

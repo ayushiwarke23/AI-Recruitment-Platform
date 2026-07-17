@@ -1,0 +1,50 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<h1>Saved Jobs</h1>
+
+{% for saved in saved_jobs %}
+
+<div>
+
+    <h3>{{ saved.job.title }}</h3>
+
+    <p><strong>Company:</strong>
+        {{ saved.job.company.company_name }}
+    </p>
+
+    <p><strong>Location:</strong>
+        {{ saved.job.location }}
+    </p>
+
+    <p><strong>Job Type:</strong>
+        {{ saved.job.job_type }}
+    </p>
+
+    <p><strong>Salary:</strong>
+        {{ saved.job.salary_min }} -
+        {{ saved.job.salary_max }}
+    </p>
+
+    <a href="{% url 'job_details' saved.job.id %}">
+        View Job
+    </a>
+
+    |
+
+    <a href="{% url 'remove_saved_job' saved.id %}">
+        Remove
+    </a>
+
+</div>
+
+<hr>
+
+{% empty %}
+
+<p>No saved jobs.</p>
+
+{% endfor %}
+
+{% endblock %}

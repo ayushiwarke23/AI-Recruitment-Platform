@@ -230,3 +230,41 @@ class Job(models.Model):
 
     def __str__(self):
         return f"{self.title} at {self.company.company_name}"
+    
+class Application(models.Model):
+    STATUS = [
+        ("Applied","Applied"),
+        ("Under Review", "Under Review"),
+        ("Shortlisted", "Shortlisted"),
+        ("Interview Scheduled", "Interview Scheduled"),
+        ("Selected", "Selected"),
+        ("Rejected", "Rejected"),
+    ]
+    candidate = models.ForeignKey(CandidateProfile, on_delete=models.CASCADE, related_name="applications")
+    job = models.ForeignKey(Job, on_delete=models.CASCADE, related_name="applications")
+
+    cover_letter = models.TextField(blank=True)
+    status = models.CharField(max_length=30, choices=STATUS, default="Applied")
+    applied_at = models.DateTimeField(auto_now_add=True)
+    resume = models.FileField(upload_to="application_resume/")
+    def __str__(self):
+        return f"{self.candidate.full_name} - {self.job.title}"
+    
+class SavedJob(models.Model):
+
+    candidate = models.ForeignKey(
+        CandidateProfile,
+        on_delete=models.CASCADE,
+        related_name="saved_jobs"
+    )
+    job = models.ForeignKey(
+        Job,
+        on_delete=models.CASCADE,
+        related_name="saved_by"
+    )
+    saved_at = models.DateTimeField(auto_now_add=True)
+    class Meta:
+        unique_together = ("candidate", "job")
+
+    def __str__(self):
+        return f"{self.candidate.full_name} - {self.job.title}"

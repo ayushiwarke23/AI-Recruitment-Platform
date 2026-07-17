@@ -1,0 +1,47 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<h1>My Applications</h1>
+
+{% for application in applications %}
+
+<div>
+
+    <h3>{{ application.job.title }}</h3>
+
+    <p>
+        <strong>Company:</strong>
+        {{ application.job.company.company_name }}
+    </p>
+
+    <p>
+        <strong>Location:</strong>
+        {{ application.job.location }}
+    </p>
+
+    <p>
+        <strong>Status:</strong>
+        {{ application.status }}
+    </p>
+
+    <p>
+        <strong>Applied On:</strong>
+        {{ application.applied_at }}
+    </p>
+
+    <a href="{{ application.resume.url }}">
+        View Resume
+    </a>
+
+</div>
+
+<hr>
+
+{% empty %}
+
+<p>You haven't applied to any jobs yet.</p>
+
+{% endfor %}
+
+{% endblock %}

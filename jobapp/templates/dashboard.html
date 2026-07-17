@@ -25,12 +25,12 @@
 </a>
 
 <hr>
-
-<h4>Coming Soon</h4>
-
-<p>My Applications</p>
-
-<p>Saved Jobs</p>
+<a href="{% url 'my_applications' %}">
+    My Applications
+</a>
+<a href="{% url 'saved_jobs' %}">
+    Saved Jobs
+</a>
     <!--RECRUITER DASHBOARD-->
 
 {% elif role == "recruiter" %}

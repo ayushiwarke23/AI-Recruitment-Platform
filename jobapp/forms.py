@@ -1,5 +1,5 @@
 from django import forms
-from .models import Certification, Education, Experience, RecruiterProfile, Skill, Project, Company, Job
+from .models import Certification, Education, Experience, RecruiterProfile, Skill, Project, Company, Job, Application
 
 class EducationForm(forms.ModelForm):
 
@@ -131,3 +131,11 @@ class JobForm(forms.ModelForm):
         "application_deadline": forms.DateInput(
             attrs={"type": "date"}),
         }
+
+class ApplicationForm(forms.ModelForm):
+    class Meta:
+        model = Application
+        fields = [
+            "resume",
+            "cover_letter",
+        ]
