@@ -11,7 +11,10 @@ from .forms import CertificationForm, EducationForm, ProjectForm, SkillForm, Exp
 @login_required
 def dashboard(request):
 
-    role = UserRole.objects.get(user=request.user)
+    role = UserRole.objects.filter(user = request.user).first()
+
+    if role is None:
+            return redirect("ulogout")
 
     return render(
         request,

@@ -1,0 +1,54 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<h1>My Jobs</h1>
+
+{% for job in jobs %}
+
+<div>
+
+    <h3>{{ job.title }}</h3>
+
+    <p>{{ job.company.company_name }}</p>
+
+    <p>{{ job.location }}</p>
+
+    <p>{{ job.job_type }}</p>
+
+    <p>{{ job.workplace_type }}</p>
+
+    <p>{{ job.salary_min }} - {{ job.salary_max }}</p>
+
+    <p>{{ job.skills_required }}</p>
+
+    <a href="{% url 'edit_job' job.id %}">
+        Edit
+    </a>
+
+    |
+
+    <a href="{% url 'delete_job' job.id %}"
+       onclick="return confirm('Delete this job?')">
+
+        Delete
+
+    </a>
+
+</div>
+
+<hr>
+
+{% empty %}
+
+<p>No jobs posted yet.</p>
+
+{% endfor %}
+
+<br>
+
+<a href="{% url 'add_job' %}">
+    + Add Job
+</a>
+
+{% endblock %}

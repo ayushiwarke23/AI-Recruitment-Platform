@@ -1,0 +1,43 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<h1>Recruiter Profile</h1>
+
+{% if recruiter.profile_picture %}
+    <img src="{{ recruiter.profile_picture.url }}" width="150">
+{% endif %}
+
+<p><strong>Username:</strong> {{ recruiter.user.username }}</p>
+
+<p><strong>Email:</strong> {{ recruiter.user.email }}</p>
+
+<p><strong>Full Name:</strong> {{ recruiter.full_name }}</p>
+
+<p><strong>Phone:</strong> {{ recruiter.phone }}</p>
+
+<p><strong>Company:</strong> {{ recruiter.company }}</p>
+
+<p><strong>Designation:</strong> {{ recruiter.designation }}</p>
+
+<p><strong>Department:</strong> {{ recruiter.department }}</p>
+
+<p><strong>Experience:</strong> {{ recruiter.experience_years }} Years</p>
+
+<p><strong>Office:</strong> {{ recruiter.office_location }}</p>
+
+<p><strong>LinkedIn:</strong>
+<a href="{{ recruiter.linkedin }}" target="_blank">
+    {{ recruiter.linkedin }}
+</a>
+</p>
+
+<p><strong>Bio:</strong> {{ recruiter.bio }}</p>
+
+<br>
+
+<a href="{% url 'edit_recruiter_profile' %}">
+    Edit Profile
+</a>
+
+{% endblock %}

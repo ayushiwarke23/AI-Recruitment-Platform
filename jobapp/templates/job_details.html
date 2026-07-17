@@ -1,0 +1,51 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<h1>{{ job.title }}</h1>
+
+<p><strong>Company:</strong> {{ job.company.company_name }}</p>
+
+<p><strong>Location:</strong> {{ job.location }}</p>
+
+<p><strong>Job Type:</strong> {{ job.job_type }}</p>
+
+<p><strong>Workplace:</strong> {{ job.workplace_type }}</p>
+
+<p><strong>Experience Required:</strong>
+    {{ job.experience_required }} Years
+</p>
+
+<p><strong>Salary:</strong>
+    {{ job.salary_min }} - {{ job.salary_max }}
+</p>
+
+<p><strong>Vacancies:</strong>
+    {{ job.vacancies }}
+</p>
+
+<p><strong>Skills Required:</strong></p>
+
+<p>{{ job.skills_required }}</p>
+
+<p><strong>Description:</strong></p>
+
+<p>{{ job.description }}</p>
+
+<p><strong>Application Deadline:</strong>
+    {{ job.application_deadline }}
+</p>
+
+<br>
+
+<button>
+    Apply Now
+</button>
+
+<br><br>
+
+<a href="{% url 'browse_jobs' %}">
+    Back
+</a>
+
+{% endblock %}

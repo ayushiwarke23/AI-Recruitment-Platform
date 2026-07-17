@@ -5,7 +5,8 @@ from django.urls import path
 from jobapp import views
 from jobapp.views import add_education, ulogin,usignup,ulogout,change_password,dashboard, candidate_profile, view_candidate_profile, edit_education, delete_education,add_skills,delete_skills,add_project,edit_project,delete_project, add_experience, edit_experience, delete_experience, add_certifications, delete_certifications   
 from jobapp.company_views import company_profile, view_company_profile
-
+from jobapp.recruiter_views import recruiter_profile, view_recruiter_profile, edit_recruiter_profile
+from jobapp.job_views import add_job, view_job, edit_job, delete_job, browse_jobs, job_details
 
 urlpatterns = [
     path('admin/', admin.site.urls),
@@ -31,6 +32,20 @@ urlpatterns = [
     path("delete_experience/<int:id>/", delete_experience, name="delete_experience"),
     path("company_profile/", company_profile, name="company_profile"),
     path("view_company_profile/", view_company_profile, name="view_company_profile"),
+    path("recruiter_profile/", recruiter_profile, name="recruiter_profile"),
+    path("view_recruiter_profile/", view_recruiter_profile, name="view_recruiter_profile"),
+    path("edit_recruiter_profile/", edit_recruiter_profile, name="edit_recruiter_profile"),
+    path("add_job/", add_job,name="add_job"),
+    path("view_job/", view_job, name="view_job" ),
+    path("edit_job/<int:id>/", edit_job,name="edit_job"),
+    path("delete_job/<int:id>/",delete_job,name="delete_job"),
+    path("browse_jobs/", browse_jobs, name="browse_jobs"),
+    path("job_details/<int:id>/", job_details, name = "job_details")
+    
+
+
+
 ]
+
 if settings.DEBUG:
     urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

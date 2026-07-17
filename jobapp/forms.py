@@ -1,5 +1,5 @@
 from django import forms
-from .models import Certification, Education, Experience, Skill, Project, Company
+from .models import Certification, Education, Experience, RecruiterProfile, Skill, Project, Company, Job
 
 class EducationForm(forms.ModelForm):
 
@@ -51,6 +51,12 @@ class ExperienceForm(forms.ModelForm):
             "currently_working",
             "job_description",
         ]
+        widgets = { 
+            "start_date":forms.DateInput(
+                attrs={"type":"date"}), 
+            "end_date":forms.DateInput(
+                attrs={"type":"date"})
+            }
 class CompanyForm(forms.ModelForm):
     class Meta:
         model = Company
@@ -80,3 +86,48 @@ class CertificationForm(forms.ModelForm):
             "credential_id",
             "credential_url",
         ]
+        widgets = {
+        "issue_date": forms.DateInput(
+            attrs={"type": "date"}),
+        "expiration_date": forms.DateInput(
+            attrs={"type": "date"}),
+        }
+class RecruiterProfileForm(forms.ModelForm):
+    class Meta:
+        model = RecruiterProfile
+
+        fields = [
+            "full_name",
+            "profile_picture",
+            "phone",
+            "email",
+            "designation",
+            "department",
+            "experience_years",
+            "linkedin",
+            "office_location",
+            "bio",
+            "company",
+        ]
+class JobForm(forms.ModelForm):
+    class Meta:
+        model = Job
+        fields = [
+            "title",
+            "description",
+            "skills_required",
+            "location",
+            "job_type",
+            "workplace_type",
+            "experience_required",
+            "salary_min",
+            "salary_max",
+            "skills_required",
+            "vacancies",
+            "application_deadline",
+            "is_active",
+        ]
+        widgets = {
+        "application_deadline": forms.DateInput(
+            attrs={"type": "date"}),
+        }

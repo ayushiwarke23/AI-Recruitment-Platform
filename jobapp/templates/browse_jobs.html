@@ -1,0 +1,39 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<h1>Browse Jobs</h1>
+
+{% for job in jobs %}
+
+<div>
+
+    <h3>{{ job.title }}</h3>
+
+    <p><strong>Company:</strong> {{ job.company.company_name }}</p>
+
+    <p><strong>Location:</strong> {{ job.location }}</p>
+
+    <p><strong>Job Type:</strong> {{ job.job_type }}</p>
+
+    <p><strong>Workplace:</strong> {{ job.workplace_type }}</p>
+
+    <p><strong>Salary:</strong>
+        {{ job.salary_min }} - {{ job.salary_max }}
+    </p>
+
+    <a href="{% url 'job_details' job.id %}">
+        View Details
+    </a>
+
+</div>
+
+<hr>
+
+{% empty %}
+
+<p>No jobs available.</p>
+
+{% endfor %}
+
+{% endblock %}
