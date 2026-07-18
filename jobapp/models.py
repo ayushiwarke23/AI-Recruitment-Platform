@@ -268,3 +268,55 @@ class SavedJob(models.Model):
 
     def __str__(self):
         return f"{self.candidate.full_name} - {self.job.title}"
+    
+class Interview(models.Model):
+
+    application = models.OneToOneField(
+        Application,
+        on_delete=models.CASCADE
+    )
+
+    interview_date = models.DateField()
+    interview_time = models.TimeField()
+
+    mode = models.CharField(
+        max_length=20,
+        choices=[
+            ("Online", "Online"),
+            ("Offline", "Offline")
+        ]
+    )
+
+    meeting_link = models.URLField(blank=True)
+    office_address = models.TextField(blank=True)
+
+    interviewer_name = models.CharField(max_length=100)
+
+    instructions = models.TextField(blank=True)
+    def __str__(self):
+        return f"{self.application.candidate.full_name}"
+class Offer(models.Model):
+
+    application = models.OneToOneField(
+        Application,
+        on_delete=models.CASCADE
+    )
+
+    offer_letter = models.FileField(
+        upload_to="offer_letters/"
+    )
+
+    other_info = models.TextField(blank=True)
+    STATUS = [
+        ("Accepted","Accepted"),
+        ("Rejected","Rejected")
+    ]
+    status = models.CharField(
+    max_length=20,
+    choices=STATUS,
+    default="Pending"   
+    )
+
+    hr_contact = models.EmailField()
+    def __str__(self):
+        return f"{self.application.candidate.full_name}"

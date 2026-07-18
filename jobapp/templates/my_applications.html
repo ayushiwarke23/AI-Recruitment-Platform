@@ -33,10 +33,119 @@
     <a href="{{ application.resume.url }}">
         View Resume
     </a>
+{% if application.interview %}
 
+<hr>
+
+<h4>Interview Details</h4>
+
+<p>
+<strong>Date:</strong>
+{{ application.interview.interview_date }}
+</p>
+
+<p>
+<strong>Time:</strong>
+{{ application.interview.interview_time }}
+</p>
+
+<p>
+<strong>Mode:</strong>
+{{ application.interview.mode }}
+</p>
+
+{% if application.interview.mode == "Online" %}
+
+<p>
+<strong>Meeting Link:</strong>
+<p>{{ application.interview.meeting_link }}</p>
+<a href="{{ application.interview.meeting_link }}">
+    Join Meeting
+</a>
+
+</p>
+
+{% else %}
+
+<p>
+<strong>Office Address:</strong>
+
+{{ application.interview.office_address }}
+
+</p>
+
+{% endif %}
+
+<p>
+<strong>Interviewer:</strong>
+
+{{ application.interview.interviewer_name }}
+
+</p>
+
+<p>
+<strong>Instructions:</strong>
+
+{{ application.interview.instructions }}
+
+</p>
+
+{% endif %}
 </div>
 
 <hr>
+{% if application.offer %}
+
+<hr>
+
+<h3>Offer Details</h3>
+
+<p><strong>CTC:</strong> {{ application.offer.ctc }}</p>
+
+<p><strong>Joining Date:</strong>
+{{ application.offer.joining_date }}
+</p>
+
+<p><strong>Work Location:</strong>
+{{ application.offer.work_location }}
+</p>
+
+<p><strong>HR Email:</strong>
+{{ application.offer.hr_email }}
+</p>
+
+<p>
+
+<a href="{{ application.offer.offer_letter.url }}">
+Download Offer Letter
+
+</a>
+
+</p>
+
+<p>
+
+Offer Status : {{ application.offer.status }}
+
+</p>
+
+{% if application.offer.status == "Pending" %}
+
+<a href="{% url 'update_offer_status' application.offer.id 'accept' %}">
+Accept Offer
+</a>
+
+|
+
+<a href="{% url 'update_offer_status' application.offer.id 'decline' %}">
+Decline Offer
+</a>
+
+{% endif %}
+
+{% endif %}
+
+
 
 {% empty %}
 

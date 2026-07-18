@@ -6,7 +6,7 @@ from jobapp import views
 from jobapp.views import add_education, ulogin,usignup,ulogout,change_password,dashboard, candidate_profile, view_candidate_profile, edit_education, delete_education,add_skills,delete_skills,add_project,edit_project,delete_project, add_experience, edit_experience, delete_experience, add_certifications, delete_certifications   
 from jobapp.company_views import company_profile, view_company_profile
 from jobapp.recruiter_views import recruiter_profile, view_recruiter_profile, edit_recruiter_profile
-from jobapp.job_views import add_job, view_job, edit_job, delete_job, browse_jobs, job_details, apply_job, my_applications, save_job, saved_jobs, remove_saved_job
+from jobapp.job_views import add_job, view_job, edit_job, delete_job, browse_jobs, job_details, apply_job, my_applications, save_job, saved_jobs, remove_saved_job, recruiter_applications, change_application_status, schedule_interview, send_offer, update_offer_status
 
 
 
@@ -48,6 +48,11 @@ urlpatterns = [
     path("save_job/<int:id>/",save_job,name="save_job"),
     path("saved_jobs/",saved_jobs,name="saved_jobs"),
     path("remove_saved_job/<int:id>/",remove_saved_job,name="remove_saved_job"),  
+    path("recruiter_applications/<int:id>/", recruiter_applications, name = "recruiter_applications"),
+    path("change_application_status/<int:id>/", change_application_status, name = "change_application_status"),
+    path("schedule_interview/<int:id>/", schedule_interview, name="schedule_interview"),
+    path("send_offer/<int:id>/", send_offer, name="send_offer"),
+    path("update_offer_status/<int:id>/<str:status>/",update_offer_status, name = "update_offer_status"),
 ]
 
 if settings.DEBUG:

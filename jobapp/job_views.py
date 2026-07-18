@@ -1,7 +1,7 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth.decorators import login_required
-from .models import Job, RecruiterProfile, CandidateProfile, Application, SavedJob
-from .forms import JobForm, ApplicationForm
+from .models import Job, RecruiterProfile, CandidateProfile, Application, SavedJob, Interview, Offer
+from .forms import JobForm, ApplicationForm, InterviewForm, OfferForm
 
 
 @login_required
@@ -212,3 +212,145 @@ def remove_saved_job(request, id):
     saved.delete()
 
     return redirect("saved_jobs")
+
+@login_required
+def recruiter_applications(request,id):
+    recruiter = get_object_or_404(RecruiterProfile, user = request.user)
+    job = get_object_or_404(Job, id=id, recruiter=recruiter)
+
+    applications = Application.objects.filter(job=job)
+    return render(request, "recruiter_applications.html", {"job":job, "applications":applications})
+
+@login_required
+def change_application_status(request,id):
+    recruiter = get_object_or_404(RecruiterProfile, user = request.user)
+    application = get_object_or_404(Application, id=id, job__recruiter = recruiter)
+    if request.method == "POST":
+        application.status = request.POST.get("status")
+        application.save()
+        return redirect("recruiter_applications", application.job.id)
+    return render(request, "change_application_status.html", {"application":application})
+
+@login_required
+def schedule_interview(request, id):
+
+    recruiter = get_object_or_404(
+        RecruiterProfile,
+        user=request.user
+    )
+
+    application = get_object_or_404(
+        Application,
+        id=id,
+        job__recruiter=recruiter
+    )
+
+    if request.method == "POST":
+
+        form = InterviewForm(
+            request.POST
+        )
+
+        if form.is_valid():
+
+            interview = form.save(commit=False)
+
+            interview.application = application
+
+            interview.save()
+
+            application.status = "Interview Scheduled"
+
+            application.save()
+
+            return redirect(
+                "recruiter_applications",
+                application.job.id
+            )
+
+    else:
+
+        form = InterviewForm()
+
+    return render(
+        request,
+        "schedule_interview.html",
+        {
+            "form": form,
+            "application": application
+        }
+    )    
+@login_required
+def send_offer(request, id):
+
+    recruiter = get_object_or_404(
+        RecruiterProfile,
+        user=request.user
+    )
+
+    application = get_object_or_404(
+        Application,
+        id=id,
+        job__recruiter=recruiter
+    )
+
+    if request.method == "POST":
+
+        form = OfferForm(
+            request.POST,
+            request.FILES
+        )
+
+        if form.is_valid():
+
+            offer = form.save(commit=False)
+
+            offer.application = application
+
+            offer.save()
+
+            application.status = "Selected"
+
+            application.save()
+
+            return redirect(
+                "recruiter_applications",
+                application.job.id
+            )
+
+    else:
+
+        form = OfferForm()
+
+    return render(
+        request,
+        "send_offer.html",
+        {
+            "form": form,
+            "application": application
+        }
+    )
+
+@login_required
+def update_offer_status(request, id, status):
+
+    profile = get_object_or_404(
+        CandidateProfile,
+        user=request.user
+    )
+
+    offer = get_object_or_404(
+        Offer,
+        id=id,
+        application__candidate=profile
+    )
+
+    if status == "accept":
+        offer.status = "Accepted"
+
+    elif status == "decline":
+        offer.status = "Declined"
+
+    offer.save()
+
+    return redirect("my_applications")

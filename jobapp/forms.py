@@ -1,5 +1,5 @@
 from django import forms
-from .models import Certification, Education, Experience, RecruiterProfile, Skill, Project, Company, Job, Application
+from .models import Certification, Education, Experience, RecruiterProfile, Skill, Project, Company, Job, Application, Interview, Offer
 
 class EducationForm(forms.ModelForm):
 
@@ -139,3 +139,36 @@ class ApplicationForm(forms.ModelForm):
             "resume",
             "cover_letter",
         ]
+
+class InterviewForm(forms.ModelForm):
+
+    class Meta:
+
+        model = Interview
+
+        fields = "__all__"
+
+        widgets = {
+
+            "interview_date": forms.DateInput(
+                attrs={"type":"date"}
+            ),
+
+            "interview_time": forms.TimeInput(
+                attrs={"type":"time"}
+            ),
+        }
+class OfferForm(forms.ModelForm):
+
+    class Meta:
+
+        model = Offer
+
+        fields = "__all__"
+
+        widgets = {
+
+            "joining_date": forms.DateInput(
+                attrs={"type":"date"}
+            ),
+        }

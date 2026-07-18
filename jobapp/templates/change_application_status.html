@@ -1,0 +1,41 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<h2>
+
+{{ application.candidate.full_name }}
+
+</h2>
+
+<form method="POST">
+
+{% csrf_token %}
+
+<select name="status">
+
+<option>Applied</option>
+
+<option>Under Review</option>
+
+<option>Shortlisted</option>
+
+<option>Interview Scheduled</option>
+
+<option>Selected</option>
+
+<option>Rejected</option>
+
+</select>
+
+<br><br>
+
+<button type="submit">
+
+Update
+
+</button>
+
+</form>
+
+{% endblock %}

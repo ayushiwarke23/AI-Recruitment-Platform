@@ -1,0 +1,182 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<h1>{{ job.title }}</h1>
+
+<h2>Applications</h2>
+
+{% for application in applications %}
+
+<div>
+
+    <h3>{{ application.candidate.full_name }}</h3>
+
+    <p>
+        <strong>Email:</strong>
+        <a href="mailto:{{ application.candidate.user.email }}">
+    {{ application.candidate.user.email }}
+</a>
+    </p>
+
+    <p>
+        <strong>Phone:</strong>
+        {{ application.candidate.phone }}
+    </p>
+
+    <p>
+        <strong>Status:</strong>
+        {{ application.status }}
+    </p>
+
+    <p>
+        <strong>Applied On:</strong>
+        {{ application.applied_at }}
+    </p>
+
+    <p>
+        <strong>Resume:</strong>
+        <a href="{{ application.resume.url }}">
+            View Resume
+        </a>
+    </p>
+
+    <p>
+        <strong>Cover Letter:</strong><br>
+        {{ application.cover_letter }}
+    </p>
+
+    <a href="{% url 'change_application_status' application.id %}">
+        Update Status
+    </a>
+
+    |
+
+    <a href="{% url 'schedule_interview' application.id %}">
+        Schedule Interview
+    </a>
+
+    |
+
+    <a href="{% url 'send_offer' application.id %}">
+        Send Offer
+    </a>
+
+    {% if application.interview %}
+
+    <hr>
+
+    <h3>Interview Details</h3>
+
+    <p>
+        <strong>Date:</strong>
+        {{ application.interview.interview_date }}
+    </p>
+
+    <p>
+        <strong>Time:</strong>
+        {{ application.interview.interview_time }}
+    </p>
+
+    <p>
+        <strong>Mode:</strong>
+        {{ application.interview.mode }}
+    </p>
+
+    {% if application.interview.mode == "Online" %}
+
+        <p>
+            <strong>Meeting Link:</strong>
+
+            <a href="{{ application.interview.meeting_link }}" target="_blank">
+                Join Meeting
+            </a>
+        </p>
+
+    {% else %}
+
+        <p>
+            <strong>Office Address:</strong>
+
+            {{ application.interview.office_address }}
+        </p>
+
+    {% endif %}
+
+    <p>
+        <strong>Interviewer:</strong>
+
+        {{ application.interview.interviewer_name }}
+    </p>
+
+    <p>
+        <strong>Instructions:</strong>
+
+        {{ application.interview.instructions }}
+    </p>
+
+    {% endif %}
+
+    {% if application.offer %}
+
+    <hr>
+
+    <h3>Offer Details</h3>
+
+    <p>
+        <strong>CTC:</strong>
+
+        {{ application.offer.ctc }}
+    </p>
+
+    <p>
+        <strong>Joining Date:</strong>
+
+        {{ application.offer.joining_date }}
+    </p>
+
+    <p>
+        <strong>Work Location:</strong>
+
+        {{ application.offer.work_location }}
+    </p>
+
+    <p>
+        <strong>HR Email:</strong>
+
+        {{ application.offer.hr_email }}
+    </p>
+
+    <p>
+        <strong>Offer Letter:</strong>
+
+        <a href="{{ application.offer.offer_letter.url }}">
+            Download Offer Letter
+        </a>
+    </p>
+
+    <p>
+        <strong>Candidate Decision:</strong>
+
+        {{ application.offer.status }}
+    </p>
+
+    {% else %}
+
+    <hr>
+
+    <p><strong>No Offer Sent Yet.</strong></p>
+
+    {% endif %}
+
+</div>
+
+<hr>
+
+{% empty %}
+
+<p>No applications yet.</p>
+
+{% endfor %}
+
+{% endblock %}
