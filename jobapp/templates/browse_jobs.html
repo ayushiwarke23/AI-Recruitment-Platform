@@ -3,37 +3,237 @@
 {% block content %}
 
 <h1>Browse Jobs</h1>
+<form method="GET">
+
+    <div style="display:flex;gap:10px;flex-wrap:wrap;margin-bottom:20px;">
+
+        <input
+            type="text"
+            name="q"
+            value="{{ query }}"
+            placeholder="Search Jobs..."
+        >
+<h3>Apply Filters</h3>
+<select id="company-filter" name="company">            
+    <option value="">All Companies</option>
+
+            {% for company in companies %}
+
+            <option
+                value="{{ company.id }}"
+                {% if selected_company == company.id|stringformat:"s" %}
+                selected
+                {% endif %}
+            >
+                {{ company.company_name }}
+            </option>
+
+            {% endfor %}
+
+        </select>
+<select id="location-filter" name="location">
+            <option value="">All Locations</option>
+
+            {% for loc in locations %}
+
+            <option
+                value="{{ loc }}"
+                {% if selected_location == loc %}
+                selected
+                {% endif %}
+            >
+                {{ loc }}
+            </option>
+
+            {% endfor %}
+
+        </select>
+
+        <select name="job_type">
+
+            <option value="">Job Type</option>
+
+            <option value="full_time"
+            {% if selected_job_type == "full_time" %}selected{% endif %}>
+            Full Time
+            </option>
+
+            <option value="part_time"
+            {% if selected_job_type == "part_time" %}selected{% endif %}>
+            Part Time
+            </option>
+
+            <option value="internship"
+            {% if selected_job_type == "internship" %}selected{% endif %}>
+            Internship
+            </option>
+
+            <option value="contract"
+            {% if selected_job_type == "contract" %}selected{% endif %}>
+            Contract
+            </option>
+
+            <option value="temporary"
+            {% if selected_job_type == "temporary" %}selected{% endif %}>
+            Temporary
+            </option>
+
+        </select>
+
+        <select name="workplace_type">
+
+            <option value="">Workplace</option>
+
+            <option value="onsite"
+            {% if selected_workplace_type == "onsite" %}selected{% endif %}>
+            On Site
+            </option>
+
+            <option value="hybrid"
+            {% if selected_workplace_type == "hybrid" %}selected{% endif %}>
+            Hybrid
+            </option>
+
+            <option value="remote"
+            {% if selected_workplace_type == "remote" %}selected{% endif %}>
+            Remote
+            </option>
+
+        </select>
+
+        <input
+            type="number"
+            name="experience"
+            placeholder="Experience"
+            value="{{ selected_experience }}"
+            min="0"
+        >
+
+
+        <select name="sort">
+
+            <option value="">Sort By</option>
+
+            <option value="latest"
+            {% if selected_sort == "latest" %}selected{% endif %}>
+            Latest
+            </option>
+        </select>
+
+        <button type="submit">
+
+            Search
+
+        </button>
+
+    </div>
+
+</form>
+<br><br>
 
 {% for job in jobs %}
 
-<div>
+<div style="border:1px solid #ddd;padding:15px;margin-bottom:15px;">
 
-    <h3>{{ job.title }}</h3>
+    <h3>
 
-    <p><strong>Company:</strong> {{ job.company.company_name }}</p>
+        {{ job.title }}
 
-    <p><strong>Location:</strong> {{ job.location }}</p>
+    </h3>
 
-    <p><strong>Job Type:</strong> {{ job.job_type }}</p>
+    <b>{{ job.company.company_name }}</b>
 
-    <p><strong>Workplace:</strong> {{ job.workplace_type }}</p>
+    <br><br>
 
-    <p><strong>Salary:</strong>
-        {{ job.salary_min }} - {{ job.salary_max }}
-    </p>
+    {{ job.location }}
+
+    |
+
+    {{ job.job_type }}
+
+    |
+
+    {{ job.workplace_type }}
+
+    <br><br>
+
+    Experience :
+    {{ job.experience_required }} Years
+
+    <br>
+
+    Salary :
+
+    ₹{{ job.salary_min }}
+
+    -
+
+    ₹{{ job.salary_max }}
+
+    <br><br>
 
     <a href="{% url 'job_details' job.id %}">
+
         View Details
+
     </a>
 
 </div>
 
-<hr>
-
 {% empty %}
 
-<p>No jobs available.</p>
+<h3>
+
+No Jobs Found
+
+</h3>
 
 {% endfor %}
+
+<div style="margin-top:25px;">
+
+    {% if page_obj.has_previous %}
+
+        <a href="?{{ query_string }}&page=1">
+
+            First
+
+        </a>
+
+        <a href="?{{ query_string }}&page={{ page_obj.previous_page_number }}">
+
+            Previous
+
+        </a>
+
+    {% endif %}
+
+    <strong>
+
+        Page {{ page_obj.number }}
+
+        of
+
+        {{ page_obj.paginator.num_pages }}
+
+    </strong>
+
+    {% if page_obj.has_next %}
+
+        <a href="?{{ query_string }}&page={{ page_obj.next_page_number }}">
+
+            Next
+
+        </a>
+
+        <a href="?{{ query_string }}&page={{ page_obj.paginator.num_pages }}">
+
+            Last
+
+        </a>
+
+    {% endif %}
+
+</div>
 
 {% endblock %}

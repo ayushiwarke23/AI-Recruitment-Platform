@@ -1,6 +1,6 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth.decorators import login_required
-from .models import Company
+from .models import Company, Job, RecruiterProfile
 from .forms import CompanyForm
 
 @login_required
@@ -23,8 +23,26 @@ def company_profile(request):
 
 @login_required
 def view_company_profile(request):
-    try:
-        company = Company.objects.get(user=request.user)
-    except Company.DoesNotExist:
-        return redirect("company_profile") 
-    return render(request, "view_company_profile.html", {"company": company})
+
+    company = get_object_or_404(
+        Company,
+        user=request.user
+    )
+
+    recruiters = RecruiterProfile.objects.filter(
+        company=company
+    )
+
+    jobs = Job.objects.filter(
+        company=company
+    )
+
+    return render(
+        request,
+        "view_company_profile.html",
+        {
+            "company": company,
+            "recruiters": recruiters,
+            "jobs": jobs,
+        }
+    )

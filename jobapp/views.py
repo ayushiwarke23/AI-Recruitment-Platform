@@ -5,7 +5,7 @@ from django.contrib.auth import login, authenticate, logout
 from django.contrib.auth.password_validation import validate_password
 from django.core.exceptions import ValidationError
 from httpcore import request
-from .models import Certification, Education, Experience, Project, Skill,UserRole
+from .models import Certification, Education, Experience, Project, Skill,UserRole, Notification
 from .forms import CertificationForm, EducationForm, ProjectForm, SkillForm, ExperienceForm
 
 @login_required
@@ -15,12 +15,15 @@ def dashboard(request):
 
     if role is None:
             return redirect("ulogout")
-
+    notification_count = Notification.objects.filter(
+        user=request.user
+    ).count()
     return render(
         request,
         "dashboard.html",
         {
-            "role": role.role
+            "role": role.role,
+            "notification_count":notification_count
         }
     )
 

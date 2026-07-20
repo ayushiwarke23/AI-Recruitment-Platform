@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import Certification, Company, Education, Experience, RecruiterProfile, Skill, UserRole, CandidateProfile, Project, Job, Application, SavedJob, Interview, Offer
+from .models import Certification, Company, Education, Experience, RecruiterProfile, Skill, UserRole, CandidateProfile, Project, Job, Application, SavedJob, Interview, Offer, Notification
 
 admin.site.register(UserRole)
 admin.site.register(CandidateProfile)
@@ -15,3 +15,4 @@ admin.site.register(SavedJob)
 admin.site.register(Application)
 admin.site.register(Interview)
 admin.site.register(Offer)
+admin.site.register(Notification)

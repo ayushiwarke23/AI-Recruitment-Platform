@@ -18,4 +18,89 @@
     {% if company.phone %}
         <p><strong>Phone:</strong> {{ company.phone }}</p>
     {% endif %}
+    <hr>
+
+<h2>Recruiters</h2>
+
+<p>
+<strong>Total Recruiters:</strong>
+{{ recruiters.count }}
+</p>
+
+{% for recruiter in recruiters %}
+
+<div>
+
+    <p>
+        <strong>Name:</strong>
+        {{ recruiter.full_name }}
+    </p>
+
+    <p>
+        <strong>Email:</strong>
+
+        <a href="mailto:{{ recruiter.user.email }}">
+            {{ recruiter.user.email }}
+        </a>
+    </p>
+
+</div>
+
+<hr>
+
+{% empty %}
+
+<p>No recruiters added.</p>
+
+{% endfor %}
+<hr>
+
+<h2>Jobs Posted</h2>
+
+<p>
+<strong>Total Jobs:</strong>
+{{ jobs.count }}
+</p>
+
+{% for job in jobs %}
+
+<div>
+
+    <h3>{{ job.title }}</h3>
+
+    <p>
+        <strong>Location:</strong>
+        {{ job.location }}
+    </p>
+
+    <p>
+        <strong>Job Type:</strong>
+        {{ job.job_type }}
+    </p>
+
+    <p>
+        <strong>Workplace:</strong>
+        {{ job.workplace_type }}
+    </p>
+
+    <p>
+        <strong>Salary:</strong>
+        {{ job.salary_min }} -
+        {{ job.salary_max }}
+    </p>
+
+    <p>
+        <strong>Recruiter:</strong>
+        {{ job.recruiter.full_name }}
+    </p>
+
+</div>
+
+<hr>
+
+{% empty %}
+
+<p>No jobs posted yet.</p>
+
+{% endfor %}
 {% endblock %}

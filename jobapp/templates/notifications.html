@@ -1,0 +1,33 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<h1>Notifications</h1>
+
+{% for notification in notifications %}
+
+<div>
+
+    <h3>{{ notification.title }}</h3>
+
+    <p>{{ notification.message }}</p>
+
+    <small>{{ notification.created_at }}</small>
+
+    <br><br>
+
+    <a href="{% url 'delete_notification' notification.id %}">
+        Delete
+    </a>
+
+</div>
+
+<hr>
+
+{% empty %}
+
+<p>No Notifications.</p>
+
+{% endfor %}
+
+{% endblock %}

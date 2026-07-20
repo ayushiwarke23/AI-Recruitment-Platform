@@ -309,7 +309,8 @@ class Offer(models.Model):
     other_info = models.TextField(blank=True)
     STATUS = [
         ("Accepted","Accepted"),
-        ("Rejected","Rejected")
+        ("Rejected","Rejected"),
+        ("Pending","Pending")
     ]
     status = models.CharField(
     max_length=20,
@@ -320,3 +321,12 @@ class Offer(models.Model):
     hr_contact = models.EmailField()
     def __str__(self):
         return f"{self.application.candidate.full_name}"
+
+class Notification(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name="notifications")
+    title = models.CharField(max_length=200)
+    message = models.TextField()
+    
+    created_at = models.DateTimeField(auto_now_add=True)
+    def __str__(self):
+        return self.title

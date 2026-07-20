@@ -109,6 +109,7 @@ class RecruiterProfileForm(forms.ModelForm):
             "bio",
             "company",
         ]
+
 class JobForm(forms.ModelForm):
     class Meta:
         model = Job
